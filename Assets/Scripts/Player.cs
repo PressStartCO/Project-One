@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
 
+    float move;
     public float fastmove;
-    bool IsShoting;
+    bool lookingRight = true;
+    bool IsShoting = false;
     [SerializeField]
     private GameObject BulletPosition;
     [SerializeField]
@@ -14,8 +16,8 @@ public class Player : MonoBehaviour {
 
 
     void Start () {
-			
-	}
+        IsShoting = false;
+    }
 	
 	void Update () {
 
@@ -23,16 +25,18 @@ public class Player : MonoBehaviour {
 
 		//movimento_horizontal
 
-			float move = Input.GetAxis("Horizontal");
+			move = Input.GetAxis("Horizontal");
 			rididbody.velocity = new Vector2(move*fastmove,rididbody.velocity.y);
        
         //virar o sprite para a esqueda.
 
             if (move < 0){
                 GetComponent<SpriteRenderer>().flipX = true;
+                lookingRight = false;
             }
             else if(move > 0){
                 GetComponent<SpriteRenderer>().flipX = false;
+                lookingRight = true;
             }
 
         //Animação Walking.
@@ -52,35 +56,50 @@ public class Player : MonoBehaviour {
 
         //Atirar.
 
-        if (Input.GetMouseButtonDown(0)){
+        if (Input.GetMouseButtonDown(0))
+        {
             IsShoting = true;
-            Action();
+
+            Shot();
         }
 
-        reset();
+
+        //Setando Animação de Atirar
+        if (IsShoting == true){
+            GetComponent<Animator>().SetBool("IsShoting", true);
+        }
+        else{
+            GetComponent<Animator>().SetBool("IsShoting", false);
+        }
+
     }
 
-    private void FixedUpdate() {
+   /* private void FixedUpdate() {
         Action();
     }
 
     void Action(){
-        if (IsShoting == true && !animator.GetCurrentAnimatorStateInfo(1).IsName("Shot")){
-            animator.SetTrigger("Shot");
+        if (IsShoting == true && !animator.GetCurrentAnimatorStateInfo(0).IsName("Shot")){
+            animator.SetBool("IsShoting", true);
             Shot();
         }
     }
+    */
 
+    //Execução do tiro.
     void Shot(){
-        GameObject tmpBullet = (GameObject)(Instantiate(Bullet, BulletPosition.transform.position, Quaternion.identity));
-        if(GetComponent<SpriteRenderer>().flipX = false){
+        GameObject tmpBullet = (GameObject)Instantiate(Bullet, BulletPosition.transform.position, Quaternion.identity);
+        
+        if (lookingRight){
             tmpBullet.GetComponent<Bullet>().Initialize(Vector2.right);
         }
-        else{
+        else {
             tmpBullet.GetComponent<Bullet>().Initialize(Vector2.left);
         }
+        
     }
 
+    //Rester a animação do tiro (Ainda não funcionando bem).
     void reset(){
         IsShoting = false;
     }

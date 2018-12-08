@@ -34,5 +34,8 @@ public class Bullet : MonoBehaviour {
         if(anotherO.gameObject.tag == "Enemy"){
             Destroy(gameObject);
         }
+        else if (anotherO.gameObject.tag == "Plataform"){
+            Destroy(gameObject);
+        }
     }
 }
