@@ -65,7 +65,7 @@ public class Player : MonoBehaviour {
     }
 
     void Action(){
-        if (IsShoting == true && animator.GetCurrentAnimatorStateInfo(0).IsTag("Shot")){
+        if (IsShoting == true && !animator.GetCurrentAnimatorStateInfo(1).IsName("Shot")){
             animator.SetTrigger("Shot");
             Shot();
         }
