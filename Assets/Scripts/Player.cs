@@ -30,4 +30,5 @@ public float fastmove;
 		//jump
 			if(Input.GetKeyDown(KeyCode.Space))
 			{rididbody.AddForce(new Vector2(0,200));}
-}}
+    }
+}
